@@ -1,6 +1,7 @@
 package com.revature.eval.java.core;
 
 import java.time.temporal.Temporal;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -447,10 +448,23 @@ public class EvaluationService {
 	 * @param l
 	 * @return
 	 */
+	
 	public List<Long> calculatePrimeFactorsOf(long l) {
-		// TODO Write an implementation for this method declaration
-		return null;
+	    List<Long> fact = new ArrayList<Long>();
+	    long f = 2;
+	    while (l > 1) {
+	        while (l % f == 0) {
+	            l = l / f;
+	            fact.add(f);
+	        }
+	        f++;
+	    }
+		return fact;
 	}
+	
+	
+	
+	
 
 	/**
 	 * 11. Create an implementation of the rotational cipher, also sometimes called
@@ -487,11 +501,23 @@ public class EvaluationService {
 		}
 
 		public String rotate(String string) {
-			// TODO Write an implementation for this method declaration
-			return null;
+		    String result = "";
+		    for (int i = 0; i < string.length(); i++) {
+		        char ch = string.charAt(i);
+		        if (ch >= 'A' && ch <= 'Z') {
+		            ch = (char)('A' + (ch - 'A' + key) % 26); 
+		        }
+		        else if (ch >= 'a' && ch <= 'z') {
+                    ch = (char)('a' + (ch - 'a' + key) % 26); 
+		        }
+		        result += ch;
+		    }
+		    
+			return result;
 		}
 
 	}
+
 
 	/**
 	 * 12. Given a number n, determine what the nth prime is.
@@ -506,10 +532,30 @@ public class EvaluationService {
 	 * @return
 	 */
 	public int calculateNthPrime(int i) {
-		// TODO Write an implementation for this method declaration
-		return 0;
+	    if (i <= 0)
+	        throw new IllegalArgumentException();
+	    if (i == 1)
+	        return 2;
+	    
+	    int num = 3;
+	    while (i > 2) {
+	        boolean isPrime = false;
+	        while (!isPrime) {
+	            num += 2;
+	            
+	            isPrime = true;
+	            for (int c = 3; c * c <= num; c += 2) {
+	               if (num % c == 0) {
+	                   isPrime = false;
+	                   break;
+	               }
+	            }
+	        }
+	        i--;	   
+	    }	    
+	    
+		return num;
 	}
-
 	/**
 	 * 13 & 14. Create an implementation of the atbash cipher, an ancient encryption
 	 * system created in the Middle East.
@@ -543,8 +589,23 @@ public class EvaluationService {
 		 * @return
 		 */
 		public static String encode(String string) {
-			// TODO Write an implementation for this method declaration
-			return null;
+		    int idx = 0;
+		    String result = "";
+		    for (int i = 0; i < string.length(); i++) {
+		        char ch = Character.toLowerCase(string.charAt(i));		        
+		        if (Character.isLetterOrDigit(ch)) {
+                    if (idx % 5 == 0 && result.length() >= 5)
+                        result += " ";
+                    
+		            if (ch >= 'a' && ch <= 'z')
+		                result += (char)('a' + (25 - (ch - 'a')));
+		            else
+		                result += ch;
+                    idx++;
+		        }
+		        
+		    }
+			return result;
 		}
 
 		/**
@@ -554,11 +615,22 @@ public class EvaluationService {
 		 * @return
 		 */
 		public static String decode(String string) {
-			// TODO Write an implementation for this method declaration
-			return null;
+
+            String result = "";
+            for (int i = 0; i < string.length(); i++) {
+                char ch = Character.toLowerCase(string.charAt(i));              
+                if (Character.isLetterOrDigit(ch)) {
+                    
+                    if (ch >= 'a' && ch <= 'z')
+                        result += (char)('a' + (25 - (ch - 'a')));
+                    else
+                        result += ch;
+                }
+                
+            }
+            return result;
 		}
 	}
-
 	/**
 	 * 15. The ISBN-10 verification process is used to validate book identification
 	 * numbers. These normally contain dashes and look like: 3-598-21508-8
@@ -582,8 +654,20 @@ public class EvaluationService {
 	 * @return
 	 */
 	public boolean isValidIsbn(String string) {
-		// TODO Write an implementation for this method declaration
-		return false;
+	    int v = 10;
+	    int total = 0;
+	    for (int i = 0; i < string.length(); i++) {
+	        char ch = string.charAt(i);
+	        if (ch >= '0' && ch <= '9' && v > 0) {
+	            total += v * (ch - '0');
+	            v--;
+	        }
+	        else if (ch == 'X' && v > 0) {
+	            total += v * 10;
+	            v--;
+	        }
+	    }
+		return total % 11 == 0;
 	}
 
 	/**

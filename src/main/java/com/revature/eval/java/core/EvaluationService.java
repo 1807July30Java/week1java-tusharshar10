@@ -1,6 +1,7 @@
 package com.revature.eval.java.core;
 
 import java.time.temporal.Temporal;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -30,8 +31,17 @@ public class EvaluationService {
 	 * @return
 	 */
 	public String acronym(String phrase) {
-		// TODO Write an implementation for this method declaration
-		return null;
+		String acr = "";
+	    for (int i = 0; i < phrase.length(); i++) {
+	        char ch = phrase.charAt(i);
+	        if (Character.isLetter(ch)) {
+	            if (i == 0 || !Character.isLetter(phrase.charAt(i-1))) {
+	                acr += Character.toUpperCase(ch);
+	            }
+	        }
+	    }
+		return acr;
+		
 	}
 
 	/**
@@ -83,23 +93,69 @@ public class EvaluationService {
 			this.sideThree = sideThree;
 		}
 
-		public boolean isEquilateral() {
-			// TODO Write an implementation for this method declaration
-			return false;
+		public boolean isEquilateral(double a, double b, double c) {
+			
+			a = sideOne;
+			b = sideTwo;
+			c = sideThree;
+			
+			if(a==b && b==c && a==c ) {
+				return true;
+		
+			}else {
+				System.out.println("this is not equilateral triangle");
+				return false;
+				
+			}
+			
+			
 		}
 
-		public boolean isIsosceles() {
-			// TODO Write an implementation for this method declaration
-			return false;
+		
+		
+		public boolean isIsosceles(double a, double b, double c) {
+			
+			
+			a = sideOne;
+			b = sideTwo;
+			c = sideThree;
+			
+			if(a==b || b==c || a==c) {
+				
+				return true;
+				
+			}else {
+				
+				System.out.println("this is not isosceles triangle");
+				return false;
+			}
+			
 		}
 
-		public boolean isScalene() {
-			// TODO Write an implementation for this method declaration
-			return false;
-		}
-
+		
+		
+		public boolean isScalene(double a, double b, double c) {
+			
+			a = sideOne;
+			b = sideTwo;
+			c = sideThree;
+			
+			if(a!=b && b!=c && a!=c ) {
+				return true;
+		
+			}else {
+				System.out.println("this is not Scalene triangle");
+				return false;
+				
+			}
+		
 	}
 
+		
+		
+		
+		
+		
 	/**
 	 * 4. Given a word, compute the scrabble score for that word.
 	 * 
@@ -115,9 +171,31 @@ public class EvaluationService {
 	 * @param string
 	 * @return
 	 */
-	public int getScrabbleScore(String string) {
-		// TODO Write an implementation for this method declaration
-		return 0;
+	
+		public int getScrabbleScore(String string) {
+			int score = 0;
+		    for (int i = 0; i < string.length(); i++) {
+		        char ch = Character.toUpperCase(string.charAt(i));
+		        if (ch == 'Q' || ch == 'Z')
+		            score += 10;
+		        else if (ch == 'J' || ch == 'X')
+		            score += 8;
+		        else if (ch == 'K')
+		            score += 5;
+		        else if (ch == 'F' || ch == 'H' || ch == 'V' 
+		                || ch == 'W' || ch == 'Y')
+		            score += 4;
+		        else if (ch == 'B' || ch == 'C' || ch == 'M' || ch == 'P')
+		            score += 3;
+		        else if (ch == 'D' || ch == 'G')
+		            score += 2;
+		        else
+		            score += 1;
+		        
+		    }
+			return score;
+			
+			
 	}
 
 	/**
@@ -152,8 +230,20 @@ public class EvaluationService {
 	 * NANP-countries, only 1 is considered a valid country code.
 	 */
 	public String cleanPhoneNumber(String string) {
-		// TODO Write an implementation for this method declaration
-		return null;
+		String str = "";
+	    String nondigit = "()-.";
+	    for (int i = 0; i < string.length(); i++) {
+	        char ch = string.charAt(i);
+	        if (ch >= '0' && ch <= '9') {
+	            if (ch != '1' || !str.isEmpty())
+	                str += ch;
+	        }
+	        else if (!Character.isWhitespace(ch) && nondigit.indexOf(ch) < 0)
+	            throw new IllegalArgumentException();
+	    }
+	    if (str.length() > 11)
+	        throw new IllegalArgumentException();
+		return str;
 	}
 
 	/**
@@ -166,8 +256,27 @@ public class EvaluationService {
 	 * @return
 	 */
 	public Map<String, Integer> wordCount(String string) {
-		// TODO Write an implementation for this method declaration
-		return null;
+		Map<String, Integer> cnt = new HashMap<>();
+	    String word = "";
+	    String stringf = string + " "; // add an ending space
+	    for (int i = 0; i < stringf.length(); i++) {
+	        char ch = stringf.charAt(i);
+	        if (!Character.isLetter(ch)) {
+	            if (!word.isEmpty()) {
+	                Integer v = cnt.get(word);
+	                if (v == null)
+	                    cnt.put(word, 1);
+	                else
+	                    cnt.put(word, v + 1);
+	            }
+	            word = "";
+	        }
+	        else {
+	            word += ch;
+	        }
+	    }
+	    
+		return cnt;
 	}
 
 	/**
@@ -209,8 +318,21 @@ public class EvaluationService {
 		private List<T> sortedList;
 
 		public int indexOf(T t) {
-			// TODO Write an implementation for this method declaration
-			return 0;
+		    int first = 0, last = sortedList.size() - 1;
+		    
+		    while (first <= last) {
+		        int mid = (first + last) / 2;
+		        int cmp = ((Comparable)t).compareTo(sortedList.get(mid));
+		        if (cmp == 0)
+		            return mid;
+		        if (cmp > 0)
+		            first = mid + 1;
+		        else
+		            last = mid - 1;
+		        
+		    }
+		    
+			return -1;
 		}
 
 		public BinarySearch(List<T> sortedList) {
@@ -246,8 +368,42 @@ public class EvaluationService {
 	 * @return
 	 */
 	public String toPigLatin(String string) {
-		// TODO Write an implementation for this method declaration
-		return null;
+		String result = "";
+	    String vowel = "AEIOUaeiou";
+	    for (int i = 0; i < string.length(); i++) {
+	        if (Character.isLetter(string.charAt(i))) {
+	            int end = i+1;
+	            while (end < string.length() && 
+	                    Character.isLetter(string.charAt(end)))
+	                end++;
+	            
+	            String word = string.substring(i, end);
+	            String pig = "";
+	            
+	            char f = Character.toUpperCase(word.charAt(0));
+	            if (vowel.indexOf(f) >= 0) {
+	                pig = word + "ay";
+	            }
+	            else if (f == 'Q' && word.length() > 1 && 
+	                    Character.toUpperCase(word.charAt(1)) == 'U') {
+	                pig = word.substring(2) + "quay";
+	            }
+	            else {
+	                int p = 1;
+	                while (p < word.length() && vowel.indexOf(word.charAt(p)) < 0) {
+	                    p++;
+	                }
+	                pig = word.substring(p) + word.substring(0,p) + "ay";
+	            }
+	            if (!result.isEmpty())
+	                result += " ";
+	            result += pig;
+	            
+	            i = end - 1;
+	        }
+	    }
+	    
+		return result;
 	}
 
 	/**
@@ -266,8 +422,19 @@ public class EvaluationService {
 	 * @return
 	 */
 	public boolean isArmstrongNumber(int input) {
-		// TODO Write an implementation for this method declaration
-		return false;
+		 int d = 0;
+		    for (int num = input; num > 0; num = num / 10) {
+		        d++;
+		    }
+		    int result = 0;
+		    for (int num = input; num > 0; num = num / 10) {
+		        int v = num % 10;
+		        result += (int)Math.pow(v, d);
+		        if (result > input)
+		            return false;
+		    }
+		    
+			return result == input;
 	}
 
 	/**
@@ -539,6 +706,6 @@ public class EvaluationService {
 	public int solveWordProblem(String string) {
 		// TODO Write an implementation for this method declaration
 		return 0;
+		}
 	}
-
 }
